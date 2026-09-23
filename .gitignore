@@ -1,0 +1,17 @@
+__pycache__/
+.venv/
+.env
+*.pyc
+*.pyo
+.pyc
+.swp
+*.swo
+.swn
+.log
+*.tmp
+.bak
+.old
+*.orig
+.tmp
+.bak
+*.orig
