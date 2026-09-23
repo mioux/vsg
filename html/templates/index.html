@@ -1,0 +1,24 @@
+{% extends 'base.html' -%}
+{% block title %}VSG - {{ gallery_name }}{% endblock %}
+{% block body -%}
+    <div class="container py-3" id="page-container">
+        <h1>Very Simple Gallery - Gallery list</h1>
+        <div class="col-12">
+            <div class="row row-cols-1 row-cols-sm-1 row-cols-md-3 row-cols-xl-4 gx-4 gy-4">
+                {% for item in galleryList -%}
+                <div class="col img-item">
+                    <div class="card rounded-0">
+                        <div class="img-container">
+                            <img src="{{ url_for('static', filename='icons/folder.svg') }}" alt="{{ item|e }}" class="img-top bg-dark bg-gradient img-thumb" data-is-dir="True"
+                            data-full-size="{{ url_for('show_gallery', name=item)|e }}"">
+                        </div>
+                        <div>
+                            {{ item }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor -%}
+            </div>
+        </div>
+    </div>
+{% endblock -%}

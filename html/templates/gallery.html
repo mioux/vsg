@@ -1,0 +1,77 @@
+{% extends 'base.html' -%}
+{% block title %}VSG - {{ galleryList[gallery_name].name }}{% endblock %}
+{% block body -%}
+  <div class="container py-3" id="page-container">
+  <hr>
+  <h3><b>Gallery</b></h3>
+  <div class="col-12">
+    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-3 row-cols-xl-4 gx-4 gy-4">
+
+      <div class="col">
+        <div class="img-item card rounded-0">
+          <div class="img-container">
+            {% if imagesList.subdir == "." -%}
+              {% set back_url = url_for("main") -%}
+              {% set back_label = "Back to Gallery list" -%}
+            {% else -%}
+              {% set back_label = "Back" -%}
+              {% if parent_path(imagesList.subdir) == "." or parent_path(imagesList.subdir) == "" -%}
+                {% set back_url = url_for("show_gallery", name=imagesList.gallery.name) -%}
+              {% else -%}
+                {% set back_url = url_for("show_gallery_w_subfolder", name=imagesList.gallery.name, subfolder=parent_path(imagesList.subdir)) -%}
+              {% endif -%}
+            {% endif -%}
+            <img src="{{ url_for("static", filename="icons/folder.svg") }}" alt="{{ back_label }}" class="img-top bg-dark bg-gradient img-thumb" data-is-dir="True"
+                 data-full-size="{{ back_url }}" loading="lazy">
+          </div>
+        </div>
+        <div>
+          <a class="btn btn-primary btn-lg" role="button" aria-disabled="true" href="{{ back_url }}"><i class="bi bi-folder2-open"></i></a> {{ back_label }}
+        </div>
+      </div>
+      {% set il = imagesList.GetList() -%}
+      {% for item in il -%}
+      {% if item.isdir %}
+      {% set full_url = url_for("show_gallery_w_subfolder", name=imagesList.gallery.name, subfolder=item.subpath)|e %}
+      {% else %}
+      {% set full_url = item.GetUrl()|e %}
+      {% endif %}
+      <div class="col">
+        <div class="img-item card rounded-0">
+          <div class="img-container">
+            <img src="{{ item.GetThumbUrl()|e }}" alt="{{ item.NameWithoutExtension()|e }}" class="img-top bg-dark bg-gradient img-thumb" data-is-dir="{{ item.isdir }}"
+                 data-full-size="{{ full_url }}" loading="lazy">
+          </div>
+        </div>
+        <div>
+          <a class="btn btn-primary btn-lg" role="button" aria-disabled="true" {%if item.isdir == False %}download {% endif %}href="{{ full_url }}"><i class="bi bi-{% if item.isdir %}folder2-open{% else %}box-arrow-down{% endif %}"></i></a>
+          {% if item.isdir == False -%}
+          <a class="btn btn-success btn-lg" role="button" aria-disabled="true" href="{{ full_url }}"><i class="bi bi-eye"></i></a>
+          {% endif -%}
+          {{ item.NameWithoutExtension() }}
+        </div>
+      </div>
+      {% endfor -%}
+    </div>
+  </div>
+</div>
+<!-- Confirmation Modal -->
+<div class="modal fade" id="imageViewerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="imageViewerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered rounded-0">
+    <div class="modal-content rounded-0">
+      <div class="modal-header py-1">
+        <h5 class="modal-title" id="imageViewerModalLabel">Viewer</h5>
+        <button type="button" style="font-size: .65em;" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body rounded-0">
+        <div id="img-viewer-container" class="d-flex">
+          <img src="" alt="Viewer" id="img-viewer" class="bg-dark bg-gradient">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End of Confirmation Modal -->
+{% endblock -%}
