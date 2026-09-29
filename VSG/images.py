@@ -4,13 +4,6 @@ from VSG.gallery import GalleryItem, Gallery
 from mimetypes import guess_type
 
 class Images:
-
-    gallery  :Gallery
-    realpath :str     = ""
-    subdir   :str     = ""
-    __dir_list__ = []
-    __img_list__ = []
-
     def __init__(self, gallery: Gallery, subdir: str):
         if type(gallery) is not Gallery:
             raise ValueError("A valid gallery must be provided")

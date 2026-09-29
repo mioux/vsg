@@ -10,10 +10,6 @@ default_width = 300
 
 @functools.total_ordering
 class Gallery:
-    name = ""
-    path = ""
-    icon = ""
-
     def __init__(self, name = "", path = "", icon = ""):
         if path is None:
             raise ValueError("Path cannot be empty")
@@ -45,16 +41,8 @@ class Gallery:
 
         return self.name == other.name and self.path == other.path
 
-
 @functools.total_ordering
 class GalleryItem:
-
-    subpath  :str     = ""
-    realpath :str     = ""
-    basename :str     = ""
-    isdir    :bool    = False
-    gallery  :Gallery
-
     def __init__(self, gallery: Gallery, subpath: str):
         if gallery is None:
             raise ValueError("Gallery cannot be none")
