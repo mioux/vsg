@@ -3,7 +3,7 @@ import os
 import functools
 from mimetypes import guess_type
 from flask import url_for
-from PIL import Image
+from PIL import Image, ImageOps
 from pathlib import Path
 
 default_width = 300
@@ -100,10 +100,11 @@ class GalleryItem:
             return
 
         with Image.open(self.realpath) as img:
-            w, h = img.size
+            resized_img = ImageOps.exif_transpose(img)
+            w, h = resized_img.size
             new_w = width
             new_h = int(h * new_w / w)
-            resized_img = img.resize((new_w, new_h), Image.BICUBIC)
+            resized_img = resized_img.resize((new_w, new_h), Image.BICUBIC)
             os.makedirs(os.path.dirname(thumbPath), exist_ok=True)
             resized_img.save(thumbPath)
 
