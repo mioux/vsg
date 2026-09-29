@@ -39,10 +39,13 @@ app = Flask(__name__,
 galleryList = {}
 
 for gallery in config["galleries"]:
-    g = Gallery(name=gallery.get("name", ""), path=gallery.get("path", ""), icon=gallery.get("icon", ""))
-    if galleryList.get(g.name) is not None:
-        print(f"Warning: a gallery with name {g.name} already exists. Please check your configuration for duplicates.", file=sys.stderr)
-    galleryList[g.name] = g
+    try:
+        g = Gallery(name=gallery.get("name", ""), path=gallery.get("path", ""), icon=gallery.get("icon", ""))
+        if galleryList.get(g.name) is not None:
+            print(f"Warning: a gallery with name {g.name} already exists. Please check your configuration for duplicates.", file=sys.stderr)
+        galleryList[g.name] = g
+    except:
+        print(f"Could not load {gallery.get("name", "")}. Please check path.", file=sys.stderr)
 
 @app.context_processor
 def inject_global_vars():
